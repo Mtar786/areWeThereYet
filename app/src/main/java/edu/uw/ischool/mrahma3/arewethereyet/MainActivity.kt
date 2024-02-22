@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
             if (!isNaggingStarted) {
                 if (validateInputs()) {
                     startNagging()
-//                    mediaPlayer.start()
                 } else {
                     Toast.makeText(this, "Please fill out all fields with valid values.", Toast.LENGTH_SHORT).show()
                 }
@@ -98,6 +97,16 @@ class MainActivity : AppCompatActivity() {
         startButton.text = "Stop"
     }
 
+    private fun sendSMS(phoneNumber: String, message: String) {
+        try {
+            val smsManager = SmsManager.getDefault()
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+            Log.d("MainActivity", "SMS sent successfully")
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Error sending SMS: ${e.message}")
+        }
+    }
+
     fun sendAudioViaMMS(audioUri: Uri, phoneNumber: String) {
         val sendIntent = Intent(Intent.ACTION_SEND)
         sendIntent.putExtra("sms_body", "Check out this audio!")
@@ -109,17 +118,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(sendIntent, "Send MMS"))
     }
 
-
-
-    private fun sendSMS(phoneNumber: String, message: String) {
-        try {
-            val smsManager = SmsManager.getDefault()
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null)
-            Log.d("MainActivity", "SMS sent successfully")
-        } catch (e: Exception) {
-            Log.e("MainActivity", "Error sending SMS: ${e.message}")
-        }
-    }
 
 
     private fun stopNagging() {
